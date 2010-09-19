@@ -1,0 +1,10 @@
+Index: b/Makefile
+===================================================================
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,4 @@
+ SUBDIRS = \
+- docs     \
+  src
+ 
+ default: all

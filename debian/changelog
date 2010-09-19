@@ -1,0 +1,5 @@
+libdebctrl (0.04~svn238) experimental; urgency=low
+
+  * Initial release
+
+ -- Ryan Niebur <ryan@debian.org>  Sat, 03 Oct 2009 22:05:21 -0700

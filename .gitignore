@@ -1,0 +1,7 @@
+*.o
+docs/html
+docs/latex
+examples/display/display
+src/libdebctrl.a
+src/libdebctrl.pc.in
+src/libdebctrl.so*

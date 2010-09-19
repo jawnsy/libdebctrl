@@ -1,0 +1,5 @@
+@INCLUDE = Doxyfile
+ENABLED_SECTIONS       = author
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+INTERNAL_DOCS          = YES

@@ -1,0 +1,48 @@
+Source: libdebctrl
+Section: libs
+Priority: optional
+Build-Depends: debhelper (>= 7.0.50), ruby1.8-dev, doxygen, ruby1.8, pkg-config, quilt (>= 0.46-7), graphviz, texlive-extra-utils, libglib2.0-dev
+Maintainer: Jonathan Yu <jawnsy@cpan.org>
+Uploaders: Ryan Niebur <ryan@debian.org>
+Standards-Version: 3.8.3
+
+Package: libdebctrl0
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: blah.
+ blah blah blah.
+
+Package: libdebctrl-dev
+Section: libdevel
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, libdebctrl0 (= ${binary:Version}), libglib2.0-dev
+Description: blah.
+ blah blah blah.
+
+Package: libdebctrl-docs
+Section: docs
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: blah.
+ blah blah blah.
+
+Package: libdebctrl-ruby1.8
+Section: ruby
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, libdebctrl0 (= ${binary:Version})
+Description: blah.
+ blah blah blah.
+
+Package: libdebctrl-ruby1.9
+Section: ruby
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: blah.
+ blah blah blah.
+
+Package: libdebctrl-ruby
+Section: ruby
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}, libdebctrl-ruby1.8 (= ${binary:Version})
+Description: blah.
+ blah blah blah.

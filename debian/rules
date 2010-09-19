@@ -1,0 +1,56 @@
+#!/usr/bin/make -f
+
+%:
+	dh --with quilt $@
+
+PKG_CONFIG_PATH=$(shell readlink -f debian/tmp/usr/lib/pkgconfig/)
+
+install_toplevel: build_toplevel
+	dh_auto_install -- PREFIX=/usr/
+
+build_toplevel: configure_toplevel
+	dh_auto_build
+
+configure_toplevel:
+	dh_auto_configure
+
+configure_all: configure_toplevel configure_ruby
+	@echo $@
+
+build_all: build_toplevel build_ruby
+	@echo $@
+
+install_all: install_toplevel install_ruby
+	@echo $@
+
+configure_ruby: install_toplevel
+	mkdir -p ./bindings/ruby/ruby1.8
+#	mkdir -p ./bindings/ruby/ruby1.9
+	cd ./bindings/ruby/ruby1.8; PKG_CONFIG_PATH=$(PKG_CONFIG_PATH) ruby1.8 ../ext/libdebctrl/extconf.rb
+#	cd ./bindings/ruby/ruby1.9; ruby1.9 ../ext/libdebctrl/extconf.rb
+
+override_dh_auto_configure:
+	@echo $@
+
+override_dh_auto_install: install_all
+	@echo $@
+
+override_dh_auto_build:
+	@echo $@
+
+BINDINGS_CFLAGS=CFLAGS=
+
+build_ruby: configure_ruby
+	cd ./bindings/ruby/ruby1.8; make
+#	cd ./bindings/ruby/ruby1.9; make
+
+DESTDIR=$(shell readlink -f debian/tmp)
+
+install_ruby: build_ruby
+	cd ./bindings/ruby/ruby1.8; make install DESTDIR=$(DESTDIR) sitelibdir=$(DESTDIR)$(shell ruby1.8 -rrbconfig -e 'puts Config::CONFIG["rubylibdir"]')
+#	cd ./bindings/ruby/ruby1.9; make install DESTDIR=$(DESTDIR)
+
+override_dh_auto_clean:
+	rm -fr ./bindings/ruby/ruby1.8 ./bindings/ruby/ruby1.9
+	dh_auto_clean
+

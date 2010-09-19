@@ -1,0 +1,28 @@
+Index: b/bindings/ruby/ext/libdebctrl/extconf.rb
+===================================================================
+--- a/bindings/ruby/ext/libdebctrl/extconf.rb
++++ b/bindings/ruby/ext/libdebctrl/extconf.rb
+@@ -1,8 +1,11 @@
+ require 'mkmf'
+ 
+ # pkg-config
+-$CFLAGS << `pkg-config --cflags libdebctrl`
+-$LDFLAGS << `pkg-config --libs libdebctrl`
++$CFLAGS << `pkg-config --define-variable=prefix=../../../debian/tmp/usr --cflags libdebctrl`.chomp
++$CFLAGS << " "
++$CFLAGS << `pkg-config --cflags glib-2.0`
++$LDFLAGS << "-L../../../debian/tmp/usr/lib/ "
++$LDFLAGS << `pkg-config --define-variable=prefix=../../../debian/tmp/usr --libs libdebctrl`
+ 
+ dir_config("libdebctrl")
+ 
+Index: b/src/libdebctrl.pc.in
+===================================================================
+--- a/src/libdebctrl.pc.in
++++ b/src/libdebctrl.pc.in
+@@ -1,4 +1,4 @@
+-prefix=++PREFIX++
++prefix=/usr
+ libdir=${prefix}/lib
+ includedir=${prefix}/include
+ 

@@ -1,0 +1,60 @@
+libdebctrl: A library for manipulating Debian Control files
+
+*** WARNING ***
+
+Note that this API is new and constantly changing. Both the API and ABI are
+set to change, possibly even significantly, as the project progresses. It is
+by no means a stable interface, so do not rely on its current state; due to
+the complex nature of some of the features in the roadmap, this release should
+be considered a PREVIEW RELEASE to give a general idea of what can be done
+with such a library.
+
+---
+
+libdebctrl is a C library for working with (parsing, manipulating, writing)
+Debian Control files. It processes control files in two phases:
+
+ 1. Parsing syntax of RFC-822 alike files, with Debian-specific extensions
+ 2. Semantic parsing and basic validation of data
+
+Currently, it supports parsing <debian/control> files. Since Step 1 is very
+generalized, it is planned for use in parsing similarly formatted files, such
+as *.changes and <debian/copyright> files.
+
+To compile the C library (as a shared .so library and a statically linked
+.a collection of objects) and all accompany documentation, simply:
+
+  $ make
+  $ sudo make install
+
+in the root directory of this package.
+
+Once installed on your system (by default in /usr/local), you can build
+and play with the example 'display' program, which simply reads in control
+data (from a debian/control file) and displays it on-screen. With this,
+you can get a feel for how the library works and what it might be useful
+for. Building examples is as easy as:
+
+  $ make -C examples/
+
+from the root directory. Note that there is no install target, since the
+examples aren't meant to be installed on your system.
+
+ACKNOWLEDGEMENTS
+
+This library was made possible by contributions from countless others in the
+Open Source community. Without their continued effort, talent and generosity,
+this project could not exist in its current form. We all stand on shoulders of
+giants.
+
+Here are some nice things to live by:
+1. Give credit where it's due.
+2. Share your modifications, so everyone benefits from them.
+3. Do something nice for the authors.
+4. Help someone who needs it.
+5. Don't waste. Anything. Be especially careful not to waste energy that
+   comes from non-renewable sources.
+6. Be tolerant. Everything that's good in nature comes from cooperation.
+Paraphrased a bit from Alberto Bertogli's Buena Onda License Agreement. For
+the full text, see: http://blitiri.com.ar/p/bola/. Some ideas for general
+library build structure came from his libjio project.
