@@ -128,7 +128,6 @@ void dc_parser_chunk_free(
     free((*ptr)->text);
 
   free(*ptr);
-
   *ptr = NULL;
 }
 
@@ -519,7 +518,7 @@ dcParser * dc_parser_new(
   parser->ctx.path = NULL;
 
   /* set up default error handler */
-  parser->handler = dc_error_handler_new();
+  dc_error_handler_init(&parser->handler);
 
   return parser;
 }
@@ -536,6 +535,11 @@ dcParser * dc_parser_new(
  *
  * \param[in,out] parser A pointer to a Parser instance
  * \param[in] line A line of textual data (a chunk)
+ *
+ * \retval dcMemFullErr if there was a failure to allocate memory
+ * \retval dcParameterErr if the parameters are invalid
+ * \retval dcSyntaxErr if there was invalid data in the file
+ * \retval dcNoErr if the operation completed successfully
  *
  * \note Any problems manipulating the chunk will be reported using a dcStatus
  * code, which should then be propagated to the external calling function.
@@ -557,8 +561,8 @@ static dcStatus dc_parse_chunk(
   /* if parser->tail->tail is NULL, then no blocks have been opened yet */
   if (parser->tail->tail == NULL)
   {
-    dc_crit(parser->handler, &parser->ctx, _("Attempted to continue previous "
-      "statement, however, none have been opened yet."));
+    dc_crit(&parser->handler, &parser->ctx, _("Attempted to continue "
+      "previous statement, however, none have been opened yet."));
     return dcSyntaxErr;
   }
 
@@ -566,7 +570,7 @@ static dcStatus dc_parse_chunk(
 
   if (line[0] == '\t' || line[1] == '\t')
   {
-    dc_warn(parser->handler, &parser->ctx, "Hard tabs in continuations will "
+    dc_warn(&parser->handler, &parser->ctx, "Hard tabs in continuations will "
       "be transformed into spaces");
   }
 
@@ -581,8 +585,8 @@ static dcStatus dc_parse_chunk(
     }
     else
     {
-      dc_crit(parser->handler, &parser->ctx, _("Lines beginning with '.' are "
-        "reserved for future use (Sec. 5.6.13)"));
+      dc_crit(&parser->handler, &parser->ctx, _("Lines beginning with '.' "
+        "are reserved for future use (Sec. 5.6.13)"));
       return dcSyntaxErr;
     }
   }
@@ -617,6 +621,11 @@ static dcStatus dc_parse_chunk(
  *
  * \param[in,out] parser A pointer to a Parser instance
  * \param[in] line A line of textual data (a block)
+ *
+ * \retval dcMemFullErr if there was a failure to allocate memory
+ * \retval dcParameterErr if the parameters are invalid
+ * \retval dcSyntaxErr if there was invalid data in the file
+ * \retval dcNoErr if the operation completed successfully
  *
  * \note Any problems manipulating the block will be reported using a dcStatus
  * code, which should then be propagated to the external calling function.
@@ -661,7 +670,7 @@ static dcStatus dc_parse_block(
   /* if we have an empty text section, then there was no ":" */
   if (*text == '\0' && *(text-1) != '\0')
   {
-    dc_crit(parser->handler, &parser->ctx, _("Expected pseudoheader/data "
+    dc_crit(&parser->handler, &parser->ctx, _("Expected pseudoheader/data "
       "pair (Sec. 5.1); if continuing a previous line, add a space"));
     free(field);
     return dcSyntaxErr;
@@ -673,7 +682,7 @@ static dcStatus dc_parse_block(
   block = dc_parser_section_find(parser->tail, field);
   if (block != NULL)
   {
-    dc_warn(parser->handler, &parser->ctx, _("Duplicate field names are not "
+    dc_warn(&parser->handler, &parser->ctx, _("Duplicate field names are not "
       "permitted (Sec. 5.1), contents will be merged together"));
   }
   else
@@ -723,6 +732,8 @@ static dcStatus dc_parse_block(
  * \param[in,out] parser A pointer to a Parser instance
  * \param[in] path The path to the file to open
  *
+ * \returns The status indication returned from \ref dc_parser_read_line
+ *
  * \note Any problems manipulating the file will be reported via the dcParser
  * \link error.c error handler interface \endlink, and the status indication
  * will be returned (as a dcStatus).
@@ -733,10 +744,10 @@ dcStatus dc_parser_read_file(
 ) {
   FILE *fp;
   char *line = NULL;
-  size_t size = 0;
+  size_t size;
   ssize_t len;
   dcStatus rc; /* return status of chunk/block parser */
-  dcParserSection *section = NULL;
+  dcParserSection *section;
 
   assert(parser != NULL);
   assert(parser->head == NULL);
@@ -750,7 +761,7 @@ dcStatus dc_parser_read_file(
   fp = fopen(path, "r");
   if (fp == NULL)
   {
-    dc_crit(parser->handler, NULL, _("Can't open file '%s': %s"),
+    dc_crit(&parser->handler, NULL, _("Can't open file '%s': %s"),
       path, strerror(errno));
     return dcFileErr;
   }
@@ -762,6 +773,8 @@ dcStatus dc_parser_read_file(
 
   while ((len = getline(&line, &size, fp)) != -1)
   {
+    parser->ctx.line++;
+
     rc = dc_parser_read_line(parser, line, len);
 
     /* if there were parsing errors, abort */
@@ -787,6 +800,9 @@ dcStatus dc_parser_read_file(
  * \param[in,out] line A pointer to the text to be parsed
  * \param[in] len The length of the string
  *
+ * \returns The status indication returned from either \ref dc_parse_block or
+ * \ref dc_parse_chunk
+ *
  * \note Any problems manipulating the file will be reported via the dcParser
  * \link error.c error handler interface \endlink, and the status indication
  * will be returned (as a dcStatus).
@@ -804,8 +820,6 @@ dcStatus dc_parser_read_line(
 
   if (parser == NULL || parser->head == NULL || line == NULL)
     return dcParameterErr;
-
-  parser->ctx.line++;
 
   section = parser->tail;
 
@@ -826,7 +840,7 @@ dcStatus dc_parser_read_line(
     /* check if the current section is empty */
     if (section->tail == NULL)
     {
-      dc_warn(parser->handler, &parser->ctx, _("Multiple blank lines will "
+      dc_warn(&parser->handler, &parser->ctx, _("Multiple blank lines will "
         "be transformed into a single blank line"));
     }
     else
@@ -903,9 +917,6 @@ void dc_parser_free(
 
   if ((*ptr)->ctx.path != NULL)
     free((*ptr)->ctx.path);
-
-  if ((*ptr)->handler != NULL)
-    dc_error_handler_free(&((*ptr)->handler));
 
   if ((*ptr)->head != NULL)
   {

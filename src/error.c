@@ -80,10 +80,18 @@ dcErrorHandler * dc_error_handler_new(
   if (handler == NULL)
     return NULL;
 
-  handler->warn = &dc_emit_warning;
-  handler->crit = &dc_emit_error;
+  dc_error_handler_init(handler);
 
   return handler;
+}
+
+void dc_error_handler_init(
+  dcErrorHandler *handler
+) {
+  assert(handler != NULL);
+
+  handler->warn = &dc_emit_warning;
+  handler->crit = &dc_emit_error;
 }
 
 /**

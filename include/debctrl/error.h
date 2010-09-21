@@ -51,6 +51,9 @@ struct _dcErrorHandler
 dcErrorHandler * dc_error_handler_new(
   void
 );
+void dc_error_handler_init(
+  dcErrorHandler *handler
+);
 void dc_error_handler_warn(
   dcErrorHandler *handler,
   void (*warn)(

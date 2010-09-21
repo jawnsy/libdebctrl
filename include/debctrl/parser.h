@@ -63,13 +63,13 @@ enum dcParserChunkType
 };
 
 /**
- * Data structure representing a Parser Context
+ * Parser Context
  *
  * A dcParserContext object provides a simple (filename, line number) tuple
  * that can be used to identify the originating context of a given block or
  * error message.
  *
- * It is used particularly to provide useful debugging output; eg. "there is
+ * It is used particularly to provide useful debugging output; eg., "there is
  * an unknown block in \c debian/control at line 30."
  */
 struct _dcParserContext
@@ -181,8 +181,7 @@ void dc_parser_section_free(
 struct _dcParser
 {
   dcParserContext ctx; /**< Tracks current parsing context */
-
-  dcErrorHandler *handler; /**< Warning/error handler */
+  dcErrorHandler handler; /**< Warning/error handler */
 
   dcParserSection *head; /**< First dcParserSection in this file */
   dcParserSection *tail; /**< Last dcParserSection in this file */
