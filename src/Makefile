@@ -87,6 +87,7 @@ install: library libdebctrl.pc
 	install -m 0644 ../include/debctrl.h $(INSTALLPATH)/include
 	install -d $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/common.h $(INSTALLPATH)/include/debctrl
+	install -m 0644 ../include/debctrl/control.h $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/defaults.h $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/error.h $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/parser.h $(INSTALLPATH)/include/debctrl

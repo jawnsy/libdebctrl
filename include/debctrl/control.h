@@ -17,6 +17,17 @@
 #include <debctrl/common.h>
 #include <debctrl/parser.h>
 
+struct _dcControlSource
+{
+  char *name; /**< Name of source package */
+};
+dcControlSource * dc_control_source_new(
+  void
+);
+void dc_control_source_free(
+  dcControlSource **ptr
+);
+
 /**
  * A Control metadata parser state object
  *
@@ -25,9 +36,9 @@
  */
 struct _dcControl
 {
-  dcErrorHandler *handler; /**< Warning/error handler */
+  dcErrorHandler handler; /**< Warning/error handler */
 
-  dcParserSection *head; /**< First dcParserSection in this file */
+  dcControlSource source; /**< Source package information */
 };
 /* related methods */
 dcControl * dc_control_new(

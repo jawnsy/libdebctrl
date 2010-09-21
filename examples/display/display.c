@@ -7,6 +7,7 @@ void usage(void);
 int main(int argc, char *argv[])
 {
   dcParser *parser;
+  dcControl *control;
   char *path;
 
   if (argc > 1 && argv[1] != NULL)
@@ -17,7 +18,14 @@ int main(int argc, char *argv[])
   parser = dc_parser_new();
   dc_parser_read_file(parser, path);
   dc_parser_dump(parser);
+
+  control = dc_control_new();
+  dc_control_parse(control, parser->head);
+
+  printf("Source package name: %s\n", control->source.name);
+
   dc_parser_free(&parser);
+  dc_control_free(&control);
 
   return 0;
 }

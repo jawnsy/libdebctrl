@@ -60,6 +60,7 @@ typedef struct _dcParserContext    dcParserContext;
 typedef struct _dcParserSection    dcParserSection;
 
 typedef struct _dcControl          dcControl;
+typedef struct _dcControlSource    dcControlSource;
 
 typedef struct _dcErrorHandler     dcErrorHandler;
 

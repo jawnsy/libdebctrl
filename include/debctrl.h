@@ -27,6 +27,7 @@
 #define DEBCTRL_H
 
 #include <debctrl/parser.h>
+#include <debctrl/control.h>
 #include <debctrl/util.h>
 #include <debctrl/error.h>
 
