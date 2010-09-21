@@ -34,46 +34,33 @@
 #include <debctrl/control.h>
 
 /**
- * Construct a Control Source package
+ * Initialize a Control Source package
  *
  * For details on the structure and its fields, see \ref dcControlSource
- *
- * \retval NULL if there is a failure to allocate memory
- * \return a dynamically allocated dcControlSource object
  */
-dcControlSource * dc_control_source_new(
-  void
+void dc_control_source_init(
+  dcControlSource *source
 ) {
-  dcControlSource *source = NEW(dcControlSource);
+  assert(source != NULL);
 
-  if (source == NULL)
-    return NULL;
-
-  return source;
+  source->name = NULL;
 }
 
 /**
- * Destroy a Control Source package
+ * Clear all information from a Control Source package
  *
- * Given a \ref dcControlSource instance that was allocated by
- * \ref dc_control_source_new, this will free internally-allocated memory
- * before destroying the control source package itself.
+ * Given a \ref dcControlSource instance, this will free internally-allocated
+ * memory, allowing it to be re-used if needed.
  *
- * \param[in,out] ptr The address of a pointer to a Control Source instance
- *
- * \note The pointer will be set to \c NULL after memory is freed.
+ * \param[in,out] ptr A pointer to a Control Source instance
  */
-void dc_control_source_free(
-  dcControlSource **ptr
+void dc_control_source_clear(
+  dcControlSource *source
 ) {
-  assert(ptr != NULL);
-  assert(*ptr != NULL);
+  assert(source != NULL);
 
-  if ((*ptr)->name != NULL)
-    free((*ptr)->name);
-
-  free(*ptr);
-  *ptr = NULL;
+  if (source->name != NULL)
+    free(source->name);
 }
 
 /**

@@ -21,11 +21,11 @@ struct _dcControlSource
 {
   char *name; /**< Name of source package */
 };
-dcControlSource * dc_control_source_new(
-  void
+void dc_control_source_init(
+  dcControlSource *source
 );
-void dc_control_source_free(
-  dcControlSource **ptr
+void dc_control_source_clear(
+  dcControlSource *source
 );
 
 /**
