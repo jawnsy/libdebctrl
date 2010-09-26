@@ -63,6 +63,7 @@
 #include <strings.h>  /* for: strcasecmp */
 #include <stdio.h>    /* for: fopen, etc. */
 #include <errno.h>    /* for: errno */
+#include <ctype.h>    /* for: isascii */
 
 #include <debctrl/parser.h>
 #include <debctrl/error.h>
@@ -660,6 +661,22 @@ static dcStatus dc_parse_block(
   if (parser == NULL || line == NULL)
     return dcParameterErr;
 
+  /* ensure the field name contains only ASCII characters */
+  text = (char *) line; /* use text temporarily */
+  while (*text != '\0')
+  {
+    if (!isascii(*text))
+    {
+      dc_crit(&parser->handler, &parser->ctx, _("Field names must consist "
+        "only of ASCII characters"));
+      return dcSyntaxErr;
+    }
+    else if (*text == ':')
+      break;
+
+    text++;
+  }
+
   /* this code copies the line and calls it the "field", then advances the
    * "text" pointer until the colon is found, where it replaces it with \0.
    *
@@ -691,6 +708,7 @@ static dcStatus dc_parse_block(
     return dcSyntaxErr;
   }
 
+  /* text is a modifiable buffer, so we can drop const qualifier */
   text = (char *) dc_strchug(text);
 
   /* ensure this block is not a duplicate */
