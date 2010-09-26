@@ -98,6 +98,11 @@ dcParserChunk * dc_parser_chunk_new(
   else
   {
     chunk->text = strdup(text);
+    if (chunk->text == NULL)
+    {
+      free(chunk);
+      return NULL;
+    }
     chunk->type = CHUNK_MERGE;
   }
 
@@ -150,12 +155,22 @@ dcParserBlock * dc_parser_block_new(
   if (block == NULL)
     return NULL;
 
-  block->name = (name) ? strdup(name) : NULL;
-
   block->head = NULL;
   block->tail = NULL;
 
   block->next = NULL;
+
+  if (name != NULL)
+  {
+    block->name = strdup(name);
+    if (block->name == NULL)
+    {
+      free(block);
+      return NULL;
+    }
+  }
+  else
+    block->name = NULL;
 
   return block;
 }
@@ -757,6 +772,8 @@ dcStatus dc_parser_read_file(
     return dcParameterErr;
 
   parser->ctx.path = strdup(path);
+  if (parser->ctx.path == NULL)
+    return dcMemFullErr;
 
   fp = fopen(path, "r");
   if (fp == NULL)
