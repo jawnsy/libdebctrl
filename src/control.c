@@ -32,6 +32,62 @@
 #include <debctrl/parser.h>
 #include <debctrl/error.h>
 #include <debctrl/control.h>
+#include <debctrl/validate.h>
+
+static dcStatus dc_control_parse_package(dcControl *, dcParserBlock *);
+
+/**
+ * Information about records in Source package control files
+ *
+ * This value correlates names of control fields with functions used to handle
+ * them. Each value of this type consists of a field name (in the preferred
+ * CamelCase format, but where case is irrelevant for determining equivalence),
+ * along with a hook to a processing function
+ *
+ * The processing function must consume the entire block, emit warning/error
+ * conditions via the \ref dcErrorHandler and \ref dcStatus mechanisms, and
+ * update the \ref dcControl object accordingly.
+ */
+struct _dcControlField
+{
+  const char *name;
+  dcStatus (*hook)(
+    dcControl *,
+    dcParserBlock *
+  );
+};
+typedef struct _dcControlField dcControlField;
+
+/**
+ * Table of Control Field parsing functions
+ *
+ * This is a simple sorted table (lookups occur using binary searches, since
+ * all fields are about as likely to occur, and only occur once per section).
+ *
+ * It contains all field names as defined by Debian Policy, excluding special
+ * fields such as the X[BS]-Comment fields.
+ */
+static const dcControlField dc_field_table[] = {
+  { "Package",                &dc_control_parse_package },
+  { "Source",                 &dc_control_parse_package }
+};
+#define FIELD_TABLE_SIZE   2 /**< Number of elements in \ref dc_field_table */
+
+/**
+ * Comparison function for Control Field records
+ *
+ * This is a simple comparison function (using strcasecmp) to compare two
+ * \ref dcControlField objects, passed to \c bsearch.
+ */
+static int dc_field_compare(
+  const void *f1,
+  const void *f2
+) {
+  const dcControlField *dcf1 = (dcControlField *) f1;
+  const dcControlField *dcf2 = (dcControlField *) f2;
+
+  return strcasecmp(dcf1->name, dcf2->name);
+}
 
 /**
  * Initialize a Control Source package
@@ -101,6 +157,8 @@ dcStatus dc_control_parse(
   dcParserSection *head
 ) {
   dcParserBlock *block;
+  dcControlField needle; /* find this in the dc_field_table haystack */
+  dcControlField *res; /* result if found */
 
   assert(control != NULL);
   assert(head != NULL);
@@ -111,12 +169,50 @@ dcStatus dc_control_parse(
   block = head->head;
   if (block != NULL)
   {
-    if (strcasecmp(block->name, "Source") == 0)
-    {
-      control->source.name = strdup(block->head->text);
-    }
+    needle.name = block->name;
+    res = bsearch(&needle, dc_field_table, FIELD_TABLE_SIZE,
+      sizeof(dcControlField), dc_field_compare);
+
+    if (res == NULL)
+      dc_warn(&control->handler, &block->head->ctx, "Unknown function: %s",
+        needle.name);
+    else
+      (*res->hook)(control, block);
   }
 
+  return dcNoErr;
+}
+
+static dcStatus dc_control_parse_package(
+  dcControl *control,
+  dcParserBlock *block
+) {
+  dcParserChunk *chunk = block->head;
+
+  assert(control != NULL);
+  assert(block != NULL);
+
+  if (!dc_valid_package(chunk->text))
+  {
+    dc_warn(&control->handler, &chunk->ctx, _("Package names must be at "
+      "least two characters long, begin with a lowercase alphabetic or "
+      "numeric character, and contain only lowercase alphabetic, numeric, "
+      "or '+', '-', and '.' characters (Sec. 5.6.1)"));
+  }
+
+  /* A package name is either a Source or Package line */
+  if (*block->name == 'S' || *block->name == 's')
+  {
+    if (chunk->text == NULL)
+      control->source.name = NULL;
+    else
+      control->source.name = strdup(chunk->text);
+  }
+  else
+  {
+    // XXX: attach this to tail section
+//    control->
+  }
   return dcNoErr;
 }
 
