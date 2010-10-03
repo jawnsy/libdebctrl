@@ -50,7 +50,8 @@ OBJS =          \
  control.o      \
  error.o        \
  parser.o       \
- util.o
+ util.o         \
+ validate.o
 
 default: all
 
