@@ -34,7 +34,11 @@
 #include <debctrl/control.h>
 #include <debctrl/validate.h>
 
-static dcStatus dc_control_parse_package(dcControl *, dcParserBlock *);
+static dcStatus dc_control_parse_package(
+  dcControl *control,
+  const char *name,
+  dcParserBlock *block
+);
 
 /**
  * Information about records in Source package control files
@@ -53,6 +57,7 @@ struct _dcControlField
   const char *name;
   dcStatus (*hook)(
     dcControl *,
+    const char *,
     dcParserBlock *
   );
 };
@@ -138,6 +143,8 @@ dcControl * dc_control_new(
   /* set up default error handler */
   dc_error_handler_init(&control->handler);
 
+  control->source.name = NULL;
+
   return control;
 }
 
@@ -154,65 +161,95 @@ dcControl * dc_control_new(
  */
 dcStatus dc_control_parse(
   dcControl *control,
-  dcParserSection *head
+  dcParserSection *section
 ) {
   dcParserBlock *block;
   dcControlField needle; /* find this in the dc_field_table haystack */
   dcControlField *res; /* result if found */
 
   assert(control != NULL);
-  assert(head != NULL);
+  assert(section != NULL);
 
-  if (control == NULL || head == NULL)
+  if (control == NULL || section == NULL)
     return dcParameterErr;
 
-  block = head->head;
-  if (block != NULL)
+  block = section->head;
+  while (block != NULL)
   {
     needle.name = block->name;
     res = bsearch(&needle, dc_field_table, FIELD_TABLE_SIZE,
       sizeof(dcControlField), dc_field_compare);
 
     if (res == NULL)
-      dc_warn(&control->handler, &block->head->ctx, "Unknown function: %s",
-        needle.name);
+      dc_warn(&control->handler, &block->head->ctx, _("Ignoring unknown "
+        "source package control field '%s'"), needle.name);
     else
-      (*res->hook)(control, block);
+      (*res->hook)(control, res->name, block);
+
+    block = block->next;
   }
 
   return dcNoErr;
 }
 
+/**
+ * Parse a package name (helper function)
+ *
+ * This is an internal helper function used to parse package names (from the
+ * Source or Package fields), validating them using \ref dc_valid_package.
+ *
+ * \param[in,out] control A pointer to a Control instance
+ * \param[in] name The 'proper' name of the Debian control field
+ * \param[in] block A pointer to the current dcParserBlock
+ *
+ * \retval dcMemFullErr if there was a failure to allocate memory
+ * \retval dcNoErr if the operation completed successfully
+ */
 static dcStatus dc_control_parse_package(
   dcControl *control,
+  const char *name,
   dcParserBlock *block
 ) {
-  dcParserChunk *chunk = block->head;
+  dcParserChunk *chunk;
 
   assert(control != NULL);
   assert(block != NULL);
 
+  chunk = block->head;
+
   if (!dc_valid_package(chunk->text))
   {
     dc_warn(&control->handler, &chunk->ctx, _("Package names must be at "
-      "least two characters long, begin with a lowercase alphabetic or "
-      "numeric character, and contain only lowercase alphabetic, numeric, "
-      "or '+', '-', and '.' characters (Sec. 5.6.1)"));
+      "least two characters long, begin with a number or lower-case letter, "
+      "and contain only lower-case alphabetic, numeric, or '+', '-', and '.' "
+      "characters (Sec. 5.6.1)"));
   }
 
   /* A package name is either a Source or Package line */
-  if (*block->name == 'S' || *block->name == 's')
+  if (*name == 'S')
   {
     if (chunk->text == NULL)
       control->source.name = NULL;
     else
+    {
       control->source.name = strdup(chunk->text);
+      if (control->source.name == NULL)
+        return dcMemFullErr;
+    }
   }
-  else
+  else /* then (*name == 'P') */
   {
     // XXX: attach this to tail section
 //    control->
   }
+
+  chunk = chunk->next;
+  if (chunk != NULL)
+  {
+    dc_warn(&control->handler, &chunk->ctx, _("Ignoring unexpected "
+      "continuation data in '%s' field"), name);
+  }
+
   return dcNoErr;
 }
 

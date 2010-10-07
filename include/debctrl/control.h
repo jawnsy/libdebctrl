@@ -46,7 +46,7 @@ dcControl * dc_control_new(
 );
 dcStatus dc_control_parse(
   dcControl *control,
-  dcParserSection *head
+  dcParserSection *section
 );
 dcStatus dc_control_parse_file(
   dcControl *control,
