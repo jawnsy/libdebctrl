@@ -66,4 +66,6 @@ typedef struct _dcErrorHandler     dcErrorHandler;
 
 typedef struct _dcString           dcString;
 
+typedef struct _dcVersion          dcVersion;
+
 #endif /* DEBCTRL_COMMON_H */
