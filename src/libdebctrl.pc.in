@@ -1,9 +1,9 @@
-prefix=/usr/local
+prefix=++PREFIX++
 libdir=${prefix}/lib
 includedir=${prefix}/include
 
 Name: libdebctrl
 Description: Debian Control file manipulation library
-Version: 0.4
-Libs: -L${libdir} -ldebctrl 
-Cflags: -I${includedir} 
+Version: ++VERSION++
+Libs: -L${libdir} -ldebctrl ++LDFLAGS++
+Cflags: -I${includedir} ++CFLAGS++
