@@ -143,7 +143,8 @@ dcControl * dc_control_new(
   /* set up default error handler */
   dc_error_handler_init(&control->handler);
 
-  control->source.name = NULL;
+  /* initialize static dcControlSource part */
+  dc_control_source_init(&control->source);
 
   return control;
 }
@@ -269,6 +270,9 @@ void dc_control_free(
 ) {
   assert(ptr != NULL);
   assert(*ptr != NULL);
+
+  /* free allocated memory from dcControlSource */
+  dc_control_source_clear(&(*ptr)->source);
 
   free(*ptr);
   *ptr = NULL;
