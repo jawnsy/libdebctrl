@@ -9,8 +9,8 @@
  * \author Jonathan Yu <jawnsy@cpan.org>
  *
  * This provides utilities for:
- *  - string manipulation
- *  - version number tracking
+ * - string manipulation
+ * - version number tracking
  *
  * These utilities are used internally by libdebctrl, and may also be useful
  * externally.
@@ -193,7 +193,7 @@ int dc_string_resize(
  * buffer if necessary (using \ref dc_string_resize).
  *
  * \param[in] string A dcString for which text will be appended
- * \param[in] text A \c NULL-terminated C string to append
+ * \param[in] text A \c NULL terminated C string to append
  *
  * \note If there is a failure to allocate memory on resize, the string will
  * be truncated and terminated with an ellipsis ("...") to indicate this case.
@@ -296,7 +296,10 @@ void dc_string_free(
 /**
  * Construct a dcVersion from a string
  *
- * A dcVersion is a representation of a Debian package version.
+ * A dcVersion is a representation of a Debian package version, as defined by
+ * Debian Policy 5.6.12. Package version numbers can optionally have an epoch
+ * number and Debian revision, and are specified in the format:
+ * <em>[epoch:]upstream_version[-debian_revision]</em>
  *
  * \param[in] vstring A string containing the package version, or \c NULL
  * for an undefined version
@@ -304,6 +307,11 @@ void dc_string_free(
  * \retval NULL if there is a failure to allocate memory (either for dcVersion
  * or its internal strings)
  * \return a dynamically allocated dcVersion object
+ *
+ * \see "Version", from the Debian Policy Manual:
+ * http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version
+ *
+ * \see The associated data validation routine, \ref dc_valid_version
  */
 dcVersion * dc_version_new(
   const char *vstring

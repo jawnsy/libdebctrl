@@ -835,8 +835,8 @@ dcStatus dc_parser_read_file(
  * \param[in,out] line A pointer to the text to be parsed
  * \param[in] len The length of the string
  *
- * \returns The status indication returned from either \ref dc_parse_block or
- * \ref dc_parse_chunk
+ * \returns The status indication returned from either \c dc_parse_block or
+ * \c dc_parse_chunk
  *
  * \note Any problems manipulating the file will be reported via the dcParser
  * \link error.c error handler interface \endlink, and the status indication

@@ -9,8 +9,8 @@
  * \author Jonathan Yu <jawnsy@cpan.org>
  *
  * This provides utilities for:
- *  - string manipulation
- *  - version number tracking
+ * - string manipulation
+ * - version number tracking
  *
  * These utilities are used internally by libdebctrl, and may also be useful
  * externally.

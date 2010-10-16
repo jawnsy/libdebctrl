@@ -76,7 +76,7 @@ static const dcControlField dc_field_table[] = {
   { "Package",                &dc_control_parse_package },
   { "Source",                 &dc_control_parse_package }
 };
-#define FIELD_TABLE_SIZE   2 /**< Number of elements in \ref dc_field_table */
+#define FIELD_TABLE_SIZE   2 /**< Number of elements in \c dc_field_table */
 
 /**
  * Comparison function for Control Field records
@@ -113,7 +113,7 @@ void dc_control_source_init(
  * Given a \ref dcControlSource instance, this will free internally-allocated
  * memory, allowing it to be re-used if needed.
  *
- * \param[in,out] ptr A pointer to a Control Source instance
+ * \param[in,out] source A pointer to a Control Source instance
  */
 void dc_control_source_clear(
   dcControlSource *source
@@ -153,7 +153,7 @@ dcControl * dc_control_new(
  * Parse Control Source package data from a dcParser
  *
  * \param[in,out] control A pointer to a Control instance
- * \param[in] head A pointer to the head dcParserSection
+ * \param[in] section A pointer to the head dcParserSection
  *
  * \retval dcMemFullErr if there was a failure to allocate memory
  * \retval dcParameterErr if the parameters are invalid
