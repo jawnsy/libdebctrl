@@ -68,4 +68,13 @@ typedef struct _dcString           dcString;
 
 typedef struct _dcVersion          dcVersion;
 
+typedef enum
+{
+  dcNoErr,
+  dcParameterErr,
+  dcMemFullErr,
+  dcFileErr,
+  dcSyntaxErr
+} dcStatus;
+
 #endif /* DEBCTRL_COMMON_H */

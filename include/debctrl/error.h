@@ -18,15 +18,6 @@
 
 #include <debctrl/common.h>
 
-typedef enum
-{
-  dcNoErr,
-  dcParameterErr,
-  dcMemFullErr,
-  dcFileErr,
-  dcSyntaxErr
-} dcStatus;
-
 /**
  * Provides Error Handling functionality
  *
