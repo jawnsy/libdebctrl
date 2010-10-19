@@ -9,7 +9,7 @@ MANDATORY_LDFLAGS := -L$(PREFIX)/lib
 ALL_CFLAGS += $(CFLAGS) $(MANDATORY_CFLAGS) -fPIC
 ALL_LDFLAGS += $(LDFLAGS) $(MANDATORY_LDFLAGS) -fPIC
 
-LIBS = -lglib-2.0 -ldebctrl
+LIBS = -ldebctrl
 
 ifeq ($(DEBUG), 1)
 	NICE_CC = $(CC)
