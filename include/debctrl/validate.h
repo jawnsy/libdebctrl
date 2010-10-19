@@ -16,7 +16,7 @@
 
 #include <debctrl/common.h>
 
-int dc_valid_package(
+dcStatus dc_valid_package(
   const char *name
 );
 

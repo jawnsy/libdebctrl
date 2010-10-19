@@ -218,12 +218,26 @@ static dcStatus dc_control_parse_package(
 
   chunk = block->head;
 
-  if (!dc_valid_package(chunk->text))
+  switch (dc_valid_package(chunk->text))
   {
-    dc_warn(&control->handler, &chunk->ctx, _("Package names must be at "
-      "least two characters long, begin with a number or lower-case letter, "
-      "and contain only lower-case alphabetic, numeric, or '+', '-', and '.' "
-      "characters (Sec. 5.6.1)"));
+    case dcPackageLengthErr:
+      dc_warn(&control->handler, &chunk->ctx, _("Package names must be at "
+        "least two characters long (Sec. 5.6.1)"));
+      break;
+    case dcPackagePrefixErr:
+     dc_warn(&control->handler, &chunk->ctx, _("Package names must begin "
+       "with a number or lower-case letter (Sec. 5.6.1)"));
+      break;
+    case dcPackageInvalidErr:
+     dc_warn(&control->handler, &chunk->ctx, _("Package names must contain "
+       "only lower-case alphabetic, numeric, or '+', '-', and '.' "
+       "characters (Sec. 5.6.1)"));
+      break;
+    case dcNoErr:
+      break;
+    default:
+      /* unreachable */
+      break;
   }
 
   /* A package name is either a Source or Package line */

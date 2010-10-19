@@ -38,13 +38,15 @@
  *
  * \param[in] name The name of a package to validate
  *
- * \retval 0 if the package name is invalid
- * \retval 1 if the package name appears valid
+ * \retval dcNoErr if the name appears valid
+ * \retval dcPackagePrefixErr if the name begins with invalid characters
+ * \retval dcPackageLengthErr if the name is too short
+ * \retval dcPackageInvalidErr if the name contains invalid characters
  *
  * \see "5.6.1 Source" (and "5.6.7 Package"), from the Debian Policy Manual:
  * http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Source
  */
-int dc_valid_package(
+dcStatus dc_valid_package(
   const char *name
 ) {
   /* Validate the package name, according to Policy 5.6.1 */
@@ -52,7 +54,7 @@ int dc_valid_package(
   /* Package names must be at least two characters long */
   if (name == NULL || *name == '\0' || *(name+1) == '\0')
   {
-    return 0;
+    return dcPackageLengthErr;
   }
 
   /* Package names must begin with a lowercase alphabetic or numeric
@@ -62,7 +64,7 @@ int dc_valid_package(
     islower(*name) ||
     isdigit(*name)
   )) {
-    return 0;
+    return dcPackagePrefixErr;
   }
   name++;
 
@@ -78,10 +80,10 @@ int dc_valid_package(
       *name == '-' ||
       *name == '.'
     )) {
-      return 0;
+      return dcPackageInvalidErr;
     }
     name++;
   }
 
-  return 1;
+  return dcNoErr;
 }
