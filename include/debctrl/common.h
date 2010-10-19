@@ -37,7 +37,21 @@
 
 #include <debctrl/defaults.h>
 
-/* prepare for future internationalisation */
+/**
+ * Lookup localized format strings
+ *
+ * This macro uses GNU Gettext to return an appropriately localized format
+ * string, used most frequently for returning error messages.
+ *
+ * \param[in] x Default format string
+ *
+ * \returns An appropriately localized format string
+ *
+ * \bug This is currently a no-op. It is defined to prepare for future
+ * localization of error strings.
+ *
+ * \hideinitializer
+ */
 #define _(x) (x)
 
 /**
@@ -52,29 +66,54 @@
  */
 #define NEW(t)              malloc(sizeof (t))
 
-/* Forward declarations for libdebctrl types */
+/**
+ * These are forward declarations for libdebctrl types defined in other
+ * header files. Please see the originating structure definitions for
+ * details.
+ */
+/** \see The originating struct definition, \ref _dcParser */
 typedef struct _dcParser           dcParser;
+/** \see The originating struct definition, \ref _dcParserBlock */
 typedef struct _dcParserBlock      dcParserBlock;
+/** \see The originating struct definition, \ref _dcParserChunk */
 typedef struct _dcParserChunk      dcParserChunk;
+/** \see The originating struct definition, \ref _dcParserContext */
 typedef struct _dcParserContext    dcParserContext;
+/** \see The originating struct definition, \ref _dcParserSection */
 typedef struct _dcParserSection    dcParserSection;
 
+/** \see The originating struct definition, \ref _dcControl */
 typedef struct _dcControl          dcControl;
+/** \see The originating struct definition, \ref _dcControlSource */
 typedef struct _dcControlSource    dcControlSource;
 
+/** \see The originating struct definition, \ref _dcErrorHandler */
 typedef struct _dcErrorHandler     dcErrorHandler;
 
+/** \see The originating struct definition, \ref _dcString */
 typedef struct _dcString           dcString;
 
+/** \see The originating struct definition, \ref _dcVersion */
 typedef struct _dcVersion          dcVersion;
 
+/**
+ * Status indication
+ *
+ * This enumeration provides a generic status indication for various
+ * operations that can fail. Not all functions can return all status
+ * values; see documentation for each function for details.
+ */
 typedef enum
 {
-  dcNoErr,
-  dcParameterErr,
-  dcMemFullErr,
-  dcFileErr,
-  dcSyntaxErr
+  dcNoErr, /**< Operation completed successfully */
+  dcParameterErr, /**< One or more parameters are invalid */
+  dcMemFullErr, /**< Cannot allocate required memory */
+  dcFileErr, /**< File read/write operation failure */
+  dcSyntaxErr, /**< Unrecoverable syntax error in metadata */
+
+  dcPackagePrefixErr, /**< Package name has invalid prefixing characters */
+  dcPackageLengthErr, /**< Package name too short */
+  dcPackageInvalidErr /**< Package name contains invalid characters */
 } dcStatus;
 
 #endif /* DEBCTRL_COMMON_H */
