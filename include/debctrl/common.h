@@ -26,6 +26,10 @@
  * \par Internationalisation (I18n) support
  * This library is prepared for future internationalisation using GNU gettext.
  * All error messages are passed through the \c _() macro.
+ *
+ * \par Type Definitions
+ * These are forward declarations for libdebctrl types defined in other header
+ * files. Please see the originating structure definitions for details.
  */
 
 #ifndef DEBCTRL_COMMON_H
@@ -66,11 +70,6 @@
  */
 #define NEW(t)              malloc(sizeof (t))
 
-/**
- * These are forward declarations for libdebctrl types defined in other
- * header files. Please see the originating structure definitions for
- * details.
- */
 /** \see The originating struct definition, \ref _dcParser */
 typedef struct _dcParser           dcParser;
 /** \see The originating struct definition, \ref _dcParserBlock */
