@@ -12,9 +12,9 @@
  * Debian metadata (so-called "control") files.
  *
  * Briefly:
- * \li \c CHUNK_EMPTY means the chunk contains no data
- * \li \c CHUNK_MERGE means the chunk can be merged with the previous one
- * \li \c CHUNK_FIXED means the chunk has fixed formatting
+ * - \c CHUNK_EMPTY means the chunk contains no data
+ * - \c CHUNK_MERGE means the chunk can be merged with the previous one
+ * - \c CHUNK_FIXED means the chunk has fixed formatting
  *
  * For more details on how this works, see \ref parser.c
  */
