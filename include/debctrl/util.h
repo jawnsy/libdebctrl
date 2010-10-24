@@ -29,6 +29,10 @@ char * dc_strchomp(
 const char * dc_strchug(
   const char *text
 );
+char * dc_strndup(
+  const char *text,
+  size_t n
+);
 
 /**
  * An automatically-expanding string buffer

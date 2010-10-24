@@ -44,6 +44,7 @@ char * dc_strchomp(
   size_t i;
 
   assert(text != NULL);
+  assert(len > 0);
 
   for (i = len; i > 0; i--)
   {
@@ -89,6 +90,40 @@ const char * dc_strchug(
   }
 
   return text;
+}
+
+/**
+ * Duplicate a portion of a string
+ *
+ * This function duplicates the first \c n bytes of a string, providing a
+ * portable replacement for GNU libc's \c strndup function.
+ *
+ * \param[in,out] text The string to remove whitespace from
+ * \param[in] n The number of bytes to duplicate
+ *
+ * \return A pointer to a new dynamically-allocated string
+ *
+ * \note If \c _GNU_SOURCE is defined, this function uses strndup to do the
+ * heavy lifting.
+ */
+char * dc_strndup(
+  const char *text,
+  size_t n
+) {
+  char *buf;
+
+  assert(text != NULL);
+  assert(n > 0);
+
+#ifdef _GNU_SOURCE
+  buf = strndup(text, n);
+#else /* !_GNU_SOURCE */
+  buf = malloc(n+1);
+  strncpy(buf, text, n);
+  buf[n] = '\0';
+#endif /* _GNU_SOURCE */
+
+  return buf;
 }
 
 /**
@@ -274,7 +309,7 @@ void dc_string_append_c(
  * Given a dcString that was allocated by \ref dc_string_new, this will free
  * internally-allocated memory before destroying the string object itself.
  *
- * \param[in] ptr The address of a pointer to a dcString
+ * \param[in,out] ptr The address of a pointer to a dcString
  *
  * \note The pointer will be set to \c NULL after memory is freed.
  */
