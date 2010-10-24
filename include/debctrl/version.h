@@ -42,6 +42,9 @@ dcStatus dc_version_set(
   dcVersion *version,
   const char *vstring
 );
+void dc_version_clear(
+  dcVersion *version
+);
 void dc_version_free(
   dcVersion **ptr
 );
