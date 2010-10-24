@@ -19,5 +19,8 @@
 dcStatus dc_valid_package(
   const char *name
 );
+dcStatus dc_valid_version(
+  const dcVersion *version
+);
 
 #endif /* DEBCTRL_VALIDATE_H */

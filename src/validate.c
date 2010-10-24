@@ -39,6 +39,7 @@
  * \param[in] name The name of a package to validate
  *
  * \retval dcNoErr if the name appears valid
+ * \retval dcParameterErr if the \c name is \c NULL
  * \retval dcPackagePrefixErr if the name begins with invalid characters
  * \retval dcPackageLengthErr if the name is too short
  * \retval dcPackageInvalidErr if the name contains invalid characters
@@ -49,10 +50,13 @@
 dcStatus dc_valid_package(
   const char *name
 ) {
-  /* Validate the package name, according to Policy 5.6.1 */
+  assert(name != NULL);
+
+  if (name == NULL)
+    return dcParameterErr;
 
   /* Package names must be at least two characters long */
-  if (name == NULL || *name == '\0' || *(name+1) == '\0')
+  if (*name == '\0' || *(name+1) == '\0')
   {
     return dcPackageLengthErr;
   }
@@ -84,6 +88,59 @@ dcStatus dc_valid_package(
     }
     name++;
   }
+
+  return dcNoErr;
+}
+
+/**
+ * Validate a package version
+ *
+ * Given a dcVersion object containing some version information, this will
+ * determine whether the package version data meets the specification set
+ * in Debian Policy 5.6.12.
+ *
+ * Debian Policy stipulates that:
+ * - The epoch is a (generally small) unsigned integer. If it is omitted,
+ *   an epoch of zero is assumed and the upstream version may not contain
+ *   any ':' characters.
+ * - The upstream version may contain alphabetic, numeric and the '.', '+',
+ *   '-', ':' and '~' characters.
+ * - The Debian revision may contain alphabetic, numeric and the characters
+ *   '+', '.' and '~'. If it is omitted (e.g. for Debian native packages),
+ *   then the upstream version may not contain any '-' characters.
+ *
+ * \param[in,out] version A version object to validate
+ *
+ * \retval dcNoErr if the version appears valid
+ * \retval dcParameterErr if the \c version is \c NULL
+ *
+ * \see "5.6.12 Version", from the Debian Policy Manual:
+ * http://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-Version
+ */
+dcStatus dc_valid_version(
+  const dcVersion *version
+) {
+  assert(version != NULL);
+
+  if (version == NULL)
+    return dcParameterErr;
+
+/*
+  if (version->valid)
+    return dcNoErr;
+
+
+ * - The epoch is a (generally small) unsigned integer. If it is omitted,
+ *   an epoch of zero is assumed and the upstream version may not contain
+ *   any ':' characters.
+ * - The upstream version may contain alphabetic, numeric and the '.', '+',
+ *   '-', ':' and '~' characters.
+ * - The Debian revision may contain alphabetic, numeric and the characters
+ *   '+', '.' and '~'. If it is omitted (e.g. for Debian native packages),
+ *   then the upstream version may not contain any '-' characters.
+ *
+
+*/
 
   return dcNoErr;
 }
