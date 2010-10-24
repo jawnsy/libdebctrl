@@ -156,7 +156,7 @@ dcControl * dc_control_new(
  * \param[in] section A pointer to the head dcParserSection
  *
  * \retval dcMemFullErr if there was a failure to allocate memory
- * \retval dcParameterErr if the parameters are invalid
+ * \retval dcParameterErr if the input parameters are invalid
  * \retval dcSyntaxErr if there was invalid data in the file
  * \retval dcNoErr if the operation completed successfully
  */
@@ -203,8 +203,9 @@ dcStatus dc_control_parse(
  * \param[in] name The 'proper' name of the Debian control field
  * \param[in] block A pointer to the current dcParserBlock
  *
- * \retval dcMemFullErr if there was a failure to allocate memory
  * \retval dcNoErr if the operation completed successfully
+ * \retval dcMemFullErr if there was a failure to allocate memory
+ * \retval dcParameterErr if the input parameters are invalid
  */
 static dcStatus dc_control_parse_package(
   dcControl *control,
@@ -215,6 +216,9 @@ static dcStatus dc_control_parse_package(
 
   assert(control != NULL);
   assert(block != NULL);
+
+  if (control == NULL || block == NULL)
+    return dcParameterErr;
 
   chunk = block->head;
 
