@@ -51,7 +51,8 @@ OBJS =          \
  error.o        \
  parser.o       \
  util.o         \
- validate.o
+ validate.o     \
+ version.o
 
 default: all
 
@@ -93,6 +94,8 @@ install: library libdebctrl.pc
 	install -m 0644 ../include/debctrl/error.h $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/parser.h $(INSTALLPATH)/include/debctrl
 	install -m 0644 ../include/debctrl/util.h $(INSTALLPATH)/include/debctrl
+	install -m 0644 ../include/debctrl/validate.h $(INSTALLPATH)/include/debctrl
+	install -m 0644 ../include/debctrl/version.h $(INSTALLPATH)/include/debctrl
 	@echo
 	@echo "Please run ldconfig to update your library cache"
 	@echo

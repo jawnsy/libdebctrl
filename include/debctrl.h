@@ -13,23 +13,28 @@
  * software using libdebctrl, it may cause a slight reduction in performance
  * during compilation. It should not affect runtime performance.
  *
- * All of the library's API is exposed by using:
+ * All of the library's public API is exposed by using:
  *
  *   \code #include <debctrl.h> \endcode
  *
  * Currently, the following headers are included:
+ *  - \ref control.h
+ *  - \ref error.h
  *  - \ref parser.h
  *  - \ref util.h
- *  - \ref error.h
+ *  - \ref validate.h
+ *  - \ref version.h
  */
 
 #ifndef DEBCTRL_H
 #define DEBCTRL_H
 
-#include <debctrl/parser.h>
 #include <debctrl/control.h>
-#include <debctrl/util.h>
 #include <debctrl/error.h>
+#include <debctrl/parser.h>
+#include <debctrl/util.h>
+#include <debctrl/validate.h>
+#include <debctrl/version.h>
 
 #endif /* DEBCTRL_H */
 
