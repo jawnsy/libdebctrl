@@ -24,14 +24,13 @@
  * Construct a dcVersion
  *
  * A dcVersion is a representation of a Debian package version, as defined by
- * Debian Policy 5.6.12. Package version numbers can optionally have an epoch
- * number and Debian revision, and are specified in the format:
- * <em>[epoch:]upstream_version[-debian_revision]</em>
+ * Debian Policy 5.6.12.
  *
  * \retval NULL if there is a failure to allocate memory
  * \return a dynamically allocated dcVersion object
  *
- * \see The associated data validation routine, \ref dc_valid_version
+ * \see The associated mutator method, \ref dc_version_set and data validation
+ * routine, \ref dc_valid_version
  */
 dcVersion * dc_version_new(
   void
@@ -49,6 +48,22 @@ dcVersion * dc_version_new(
   return version;
 }
 
+/**
+ * Extract version information from a string
+ *
+ * This method extracts version information from a string and performs some
+ * rudimentary validation checking.
+ *
+ * Package version numbers can optionally have an epoch number and Debian
+ * revision, and are specified in the format:
+ * <em>[epoch:]upstream_version[-debian_revision]</em>
+ *
+ * \param[in,out] version A pointer to a dcVersion object
+ * \param[in] vstring A package version in string format
+ *
+ * \retval dcNoErr if the operation completed successfully
+ * \retval dcParameterErr if the input parameters are invalid
+ */
 dcStatus dc_version_set(
   dcVersion *version,
   const char *vstring
