@@ -319,10 +319,8 @@ void dc_string_free(
   assert(ptr != NULL);
   assert(*ptr != NULL);
 
-  if ((*ptr)->text != NULL)
-    free((*ptr)->text);
+  free((*ptr)->text);
 
   free(*ptr);
-
   *ptr = NULL;
 }

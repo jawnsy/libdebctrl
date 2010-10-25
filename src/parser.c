@@ -130,8 +130,7 @@ void dc_parser_chunk_free(
   assert(ptr != NULL);
   assert(*ptr != NULL);
 
-  if ((*ptr)->text != NULL)
-    free((*ptr)->text);
+  free((*ptr)->text);
 
   free(*ptr);
   *ptr = NULL;
@@ -358,8 +357,7 @@ void dc_parser_block_free(
   assert(ptr != NULL);
   assert(*ptr != NULL);
 
-  if ((*ptr)->name != NULL)
-    free((*ptr)->name);
+  free((*ptr)->name);
 
   if ((*ptr)->head != NULL)
   {

@@ -120,8 +120,7 @@ void dc_control_source_clear(
 ) {
   assert(source != NULL);
 
-  if (source->name != NULL)
-    free(source->name);
+  free(source->name);
 }
 
 /**
@@ -155,10 +154,10 @@ dcControl * dc_control_new(
  * \param[in,out] control A pointer to a Control instance
  * \param[in] section A pointer to the head dcParserSection
  *
- * \retval dcMemFullErr if there was a failure to allocate memory
- * \retval dcParameterErr if the input parameters are invalid
- * \retval dcSyntaxErr if there was invalid data in the file
  * \retval dcNoErr if the operation completed successfully
+ * \retval dcParameterErr if the input parameters are invalid
+ * \retval dcMemFullErr if there was a failure to allocate memory
+ * \retval dcSyntaxErr if there was invalid data in the file
  */
 dcStatus dc_control_parse(
   dcControl *control,
@@ -204,8 +203,8 @@ dcStatus dc_control_parse(
  * \param[in] block A pointer to the current dcParserBlock
  *
  * \retval dcNoErr if the operation completed successfully
- * \retval dcMemFullErr if there was a failure to allocate memory
  * \retval dcParameterErr if the input parameters are invalid
+ * \retval dcMemFullErr if there was a failure to allocate memory
  */
 static dcStatus dc_control_parse_package(
   dcControl *control,

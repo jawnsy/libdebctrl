@@ -150,16 +150,12 @@ void dc_version_clear(
   assert(version != NULL);
 
   version->epoch = 0;
-  if (version->version != NULL)
-  {
-    free(version->version);
-    version->version = NULL;
-  }
-  if (version->revision != NULL)
-  {
-    free(version->revision);
-    version->revision = NULL;
-  }
+
+  free(version->version);
+  version->version = NULL;
+
+  free(version->revision);
+  version->revision = NULL;
 }
 
 /**
