@@ -1,9 +1,13 @@
 *.o
+autom4te.cache
 core
+config.log
+config.status
 docs/html
 docs/latex
 examples/display/display
+include/config.h.in~
+m4
 src/libdebctrl.a
 src/libdebctrl.pc
 src/libdebctrl.so*
-
