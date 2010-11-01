@@ -22,6 +22,9 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
+# Check that Doxygen is available
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+
 # Make sure libtool is available and up-to-date
 AC_PROG_LIBTOOL
 AC_SUBST(LIBTOOL_DEPS)
@@ -40,11 +43,12 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([isascii strcasecmp strdup strerror strndup strrchr strtoul strlcpy])
 
+#  docs/Makefile
+#  examples/Makefile
+#  examples/display/Makefile
+
 AC_CONFIG_FILES([
   Makefile
-  docs/Makefile
-  examples/Makefile
-  examples/display/Makefile
   src/Makefile
 ])
 AC_OUTPUT

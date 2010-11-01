@@ -1,4 +1,5 @@
 *.o
+*.lo
 autom4te.cache
 core
 config.log
@@ -7,7 +8,13 @@ docs/html
 docs/latex
 examples/display/display
 include/config.h.in~
+include/config.h
+include/stamp-*
+Makefile
 m4
+src/.deps
+src/.libs
 src/libdebctrl.a
+src/libdebctrl.la
 src/libdebctrl.pc
 src/libdebctrl.so*

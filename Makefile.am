@@ -5,6 +5,6 @@ prefix    = @prefix@
 AM_CFLAGS = $(WARNFLAGS)
 ACLOCAL_AMFLAGS = -I m4
 
+# docs
 SUBDIRS = \
- docs     \
  src
