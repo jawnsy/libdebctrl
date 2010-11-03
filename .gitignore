@@ -10,6 +10,7 @@ examples/display/display
 include/config.h.in~
 include/config.h
 include/stamp-*
+libtool
 Makefile
 m4
 src/.deps
