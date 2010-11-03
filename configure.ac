@@ -10,6 +10,9 @@ AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 # Enable friendlier short "silent" rules by default
 AM_SILENT_RULES([yes])
 
+# Enable support for the dmalloc library
+AM_WITH_DMALLOC
+
 # If we don't have src/parser.c, we're in the wrong place
 AC_CONFIG_SRCDIR([src/parser.c])
 

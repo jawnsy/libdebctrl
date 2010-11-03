@@ -96,6 +96,9 @@
 /* Version number of package */
 #undef VERSION
 
+/* Define if using the dmalloc debugging malloc package */
+#undef WITH_DMALLOC
+
 /* Define to rpl_malloc if the replacement function should be used. */
 #undef malloc
 
