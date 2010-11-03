@@ -7,8 +7,8 @@ AC_PREREQ([2.67])
 AC_INIT([libdebctrl], [0.4], [jawnsy@cpan.org])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 
-# Enable friendlier short "silent" rules
-AM_SILENT_RULES
+# Enable friendlier short "silent" rules by default
+AM_SILENT_RULES([yes])
 
 # If we don't have src/parser.c, we're in the wrong place
 AC_CONFIG_SRCDIR([src/parser.c])
