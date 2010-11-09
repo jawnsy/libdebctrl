@@ -3,6 +3,15 @@
 # We built this file with autoconf 2.67
 AC_PREREQ([2.67])
 
+# Provide configuration details in config.h
+AC_CONFIG_HEADERS([include/config.h])
+
+# If we don't have src/parser.c, we're in the wrong place
+AC_CONFIG_SRCDIR([src/parser.c])
+
+# Location to store local m4 macros
+AC_CONFIG_MACRO_DIR([m4])
+
 # Initialize autoconf and automake
 AC_INIT([libdebctrl], [0.4], [jawnsy@cpan.org])
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
@@ -12,12 +21,6 @@ AM_SILENT_RULES([yes])
 
 # Enable support for the dmalloc library
 AM_WITH_DMALLOC
-
-# If we don't have src/parser.c, we're in the wrong place
-AC_CONFIG_SRCDIR([src/parser.c])
-
-# Provide configuration details in config.h
-AC_CONFIG_HEADERS([include/config.h])
 
 # Checks for programs
 AC_PROG_CC
@@ -31,7 +34,6 @@ AC_CHECK_PROGS([DOXYGEN], [doxygen])
 # Make sure libtool is available and up-to-date
 AC_PROG_LIBTOOL
 AC_SUBST(LIBTOOL_DEPS)
-AC_CONFIG_MACRO_DIR([m4])
 LT_INIT
 
 # Checks for header files.

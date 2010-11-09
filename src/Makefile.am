@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = foreign
+
 lib_LTLIBRARIES = libdebctrl.la
 
 libdebctrl_VERSION = "1:0:0"

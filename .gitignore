@@ -12,7 +12,6 @@ include/config.h
 include/stamp-*
 libtool
 Makefile
-m4
 src/.deps
 src/.libs
 src/libdebctrl.a
