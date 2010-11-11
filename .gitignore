@@ -1,5 +1,6 @@
 *.o
 *.lo
+.libs
 autom4te.cache
 core
 config.log
@@ -13,7 +14,6 @@ include/stamp-*
 libtool
 Makefile
 src/.deps
-src/.libs
 src/libdebctrl.a
 src/libdebctrl.la
 src/libdebctrl.pc

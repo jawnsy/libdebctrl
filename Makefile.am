@@ -3,8 +3,12 @@ AUTOMAKE_OPTIONS = foreign
 AM_CFLAGS = $(WARNFLAGS)
 ACLOCAL_AMFLAGS = -I m4
 
+include_debctrldir = $(includedir)/debctrl
+
 include_HEADERS =               \
- include/debctrl.h              \
+ include/debctrl.h
+
+include_debctrl_HEADERS =       \
  include/debctrl/common.h       \
  include/debctrl/control.h      \
  include/debctrl/defaults.h     \
@@ -16,4 +20,7 @@ include_HEADERS =               \
 
 # docs
 SUBDIRS = \
- src
+ src      \
+ examples
+
+DISTCLEANFILES = *~ include/*~

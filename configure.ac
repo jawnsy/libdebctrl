@@ -14,7 +14,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 # Initialize autoconf and automake
 AC_INIT([libdebctrl], [0.4], [jawnsy@cpan.org])
-AM_INIT_AUTOMAKE([foreign -Wall -Werror])
+AM_INIT_AUTOMAKE([foreign dist-bzip2 -Wall -Werror])
 
 # Enable friendlier short "silent" rules by default
 AM_SILENT_RULES([yes])
@@ -49,11 +49,11 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([isascii strcasecmp strdup strerror strndup strrchr strtoul strlcpy])
 
 #  docs/Makefile
-#  examples/Makefile
-#  examples/display/Makefile
 
 AC_CONFIG_FILES([
   Makefile
   src/Makefile
+  examples/Makefile
+  examples/display/Makefile
 ])
 AC_OUTPUT
