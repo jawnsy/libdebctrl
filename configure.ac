@@ -55,5 +55,6 @@ AC_CONFIG_FILES([
   src/Makefile
   examples/Makefile
   examples/display/Makefile
+  examples/vercmp/Makefile
 ])
 AC_OUTPUT

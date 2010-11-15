@@ -1,5 +1,6 @@
 AUTOMAKE_OPTIONS = foreign no-dependencies
 
 SUBDIRS = \
- display
+ display  \
+ vercmp
 
