@@ -12,22 +12,21 @@ m4
 Makefile.in
 missing
 
-# Files created during build
-*.o
-*.lo
+# Files created during build  
+.deps
 .libs
+*.[ao]
+*.l[ao]
+*.pc
+*.so
+*.tar.bz2
+*.tar.gz
 config.log
 config.status
-core
-docs/html
-docs/latex
-examples/display/display
-examples/vercmp/vercmp
-include/config.h.in~
-include/config.h
 Makefile
-src/.deps
-src/libdebctrl.a
-src/libdebctrl.la
-src/libdebctrl.pc
-src/libdebctrl.so*
+
+# Don't keep the core dumps
+core
+
+# Temporary stuff
+*~
